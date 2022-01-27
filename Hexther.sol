@@ -24,6 +24,7 @@ contract Hexther is ERC20Burnable, Operator {
 
     // Supply used to launch in LP
     uint256 public constant INITIAL_LAUNCH_DISTRIBUTION = 900 ether;
+    uint256 public constant WL_LAUNCH_DISTRIBUTION = 10 ether;
 
     // Have the rewards been distributed to the pools
     bool public rewardPoolDistributed = false;
@@ -253,12 +254,15 @@ contract Hexther is ERC20Burnable, Operator {
      * @notice distribute to reward pool (only once)
      */
     function distributeReward(
-        address _genesyspool
+        address _genesyspool,
+        address _wlgenesyspool
     ) external onlyOperator {
         require(!rewardPoolDistributed, "only can distribute once");
         require(_genesyspool != address(0), "!_genesyspool");
+        require(_wlgenesyspool != address(0), "!_wlgenesyspool");
         rewardPoolDistributed = true;
         _mint(_genesyspool, INITIAL_LAUNCH_DISTRIBUTION);
+        _mint(_wlgenesyspool, WL_LAUNCH_DISTRIBUTION);
     }
 
     function governanceRecoverUnsupported(
